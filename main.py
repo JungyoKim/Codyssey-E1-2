@@ -97,6 +97,49 @@ class QuizManager:
         total = len(self.quizzes)
         print(f"결과: {total}문제 중 {score}문제 정답.")
 
+    def add_quiz(self):
+        print("\n새로운 퀴즈를 추가합니다.")
+
+        while True:
+            question = input("문제: ").strip()
+            if question:
+                break
+            print("문제는 빈 값일 수 없습니다. 다시 입력해주세요.")
+
+        choices = []
+        for i in range(1, 5):
+            while True:
+                choice = input(f"선택지 {i}: ").strip()
+                if choice:
+                    choices.append(choice)
+                    break
+                print("선택지는 빈 값일 수 없습니다. 다시 입력해주세요.")
+
+        answer = self.get_valid_input("정답 번호를 입력하세요. (1-4): ", 1, 4)
+    
+        self.quizzes.append(Quiz(question, choices, answer))
+
+        self.save_state()
+        print("퀴즈가 추가되었습니다.")
+
+    def save_state(self):
+        try:
+            quiz_dicts = []
+            for q in self.quizzes:
+                quiz_dicts.append(q.to_dict())
+
+            data = {
+                "quizzes": quiz_dicts,
+                "best_score": self.best_score
+            }
+
+            with open("state.json", "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=4)
+        except Exception as e:
+            print(f"⚠️ 데이터 저장 실패: {e}")
+
+    
+
 if __name__ == "__main__":
     manager = QuizManager()
-    manager.play()
+    manager.add_quiz()
