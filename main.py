@@ -136,10 +136,22 @@ class QuizManager:
             with open("state.json", "w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=4)
         except Exception as e:
-            print(f"⚠️ 데이터 저장 실패: {e}")
+            print(f"데이터 저장 실패: {e}")
+
+    def quiz_list(self):
+        if not self.quizzes:
+            print("\n등록된 퀴즈가 없습니다.")
+            return
+
+        # 2. 퀴즈 목록 출력
+        print(f"\n등록된 퀴즈 목록 (총 {len(self.quizzes)}개)")
+        print("-" * 40)
+        for i, quiz in enumerate(self.quizzes, 1):
+            print(f"[{i}] {quiz.question}")
+        print("-" * 40)
 
     
 
 if __name__ == "__main__":
     manager = QuizManager()
-    manager.add_quiz()
+    manager.quiz_list()
