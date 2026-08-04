@@ -224,3 +224,29 @@ Fast-forward
  main.py   | 51 +++++++++++++++++++++++++++++++++++++++++++++++++++
  2 files changed, 68 insertions(+)
 PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> 
+
+PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> python main.py
+
+새로운 퀴즈를 추가합니다.
+문제: asdf
+선택지 1: sadf
+선택지 2: sadf
+선택지 3: asdf
+선택지 4: sadf
+정답 번호를 입력하세요. (1-4): 3
+퀴즈가 추가되었습니다.
+PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> 
+PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git add main.py
+PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git commit -m "퀴즈 추가 기능 및 JSON파일 저장 구현"
+[main 94b33a0] 퀴즈 추가 기능 및 JSON파일 저장 구현
+ 1 file changed, 44 insertions(+), 1 deletion(-)
+PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git push
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 943 bytes | 943.00 KiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To https://github.com/JungyoKim/Codyssey-E1-2
+   399cc45..94b33a0  main -> main
