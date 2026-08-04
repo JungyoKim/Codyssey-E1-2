@@ -53,7 +53,7 @@ class Quiz:
             "answer": self.answer
         }
 
-class QuizManager:
+class QuizGame:
     def __init__(self):
         self.quizzes = []
         for q in DEFAULT_QUIZZES:
@@ -163,5 +163,5 @@ class QuizManager:
     
 
 if __name__ == "__main__":
-    manager = QuizManager()
+    manager = QuizGame()
     manager.show_best_score()
