@@ -59,6 +59,7 @@ class QuizManager:
         for q in DEFAULT_QUIZZES:
             self.quizzes.append(Quiz(q["question"], q["choices"], q["answer"]))
         self.best_score = 0
+        self.total_questions_at_best = 0
 
     def get_valid_input(self, prompt: str, min_value: int, max_value: int) -> int:
         while True:
@@ -130,7 +131,8 @@ class QuizManager:
 
             data = {
                 "quizzes": quiz_dicts,
-                "best_score": self.best_score
+                "best_score": self.best_score,
+                "total_questions_at_best": self.total_questions_at_best
             }
 
             with open("state.json", "w", encoding="utf-8") as f:
@@ -138,7 +140,7 @@ class QuizManager:
         except Exception as e:
             print(f"데이터 저장 실패: {e}")
 
-    def quiz_list(self):
+    def show_quiz_list(self):
         if not self.quizzes:
             print("\n등록된 퀴즈가 없습니다.")
             return
@@ -150,8 +152,16 @@ class QuizManager:
             print(f"[{i}] {quiz.question}")
         print("-" * 40)
 
+    def show_best_score(self):
+        print("\n" + "=" * 40)
+        if self.best_score == 0 and self.total_questions_at_best == 0:
+            print("아직 기록이 없습니다.")
+        else:
+            print(f"최고 점수: {self.best_score}문제 정답 (총 {self.total_questions_at_best}문제 중)")
+        print("=" * 40)
+
     
 
 if __name__ == "__main__":
     manager = QuizManager()
-    manager.quiz_list()
+    manager.show_best_score()
