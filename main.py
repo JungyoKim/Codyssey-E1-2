@@ -1,5 +1,6 @@
 import json
 import os
+import random
 
 STATE_FILE = "state.json"
 
@@ -126,7 +127,10 @@ class QuizGame:
 
         score = 0
 
-        for i, quiz in enumerate(self.quizzes, 1):
+        quiz_order = self.quizzes[:]
+        random.shuffle(quiz_order)
+
+        for i, quiz in enumerate(quiz_order, 1):
             quiz.display(i)
             user_answer = self.get_valid_input("정답 번호를 입력하세요: ", 1, len(quiz.choices))
             if quiz.is_correct(user_answer):
@@ -135,7 +139,7 @@ class QuizGame:
             else:
                 print(f"오답입니다. 정답은 {quiz.answer}번 입니다.")
 
-        total = len(self.quizzes)
+        total = len(quiz_order)
         print("\n" + "=" * 40)
         print(f"결과: {total}문제 중 {score}문제 정답.")
         if score > self.best_score:
