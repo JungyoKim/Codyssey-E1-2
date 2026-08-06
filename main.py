@@ -52,21 +52,26 @@ MENU_TEXT = """
 ========================================"""
 
 class Quiz:
+    """개별 퀴즈 1개(문제, 선택지, 정답, 힌트)를 표현하는 클래스."""
     def __init__(self, question:str, choices:list[str], answer:int, hint:str = ""):
+        """퀴즈를 초기화한다: 문제, 선택지 목록, 정답 번호, 힌트를 저장한다."""
         self.question = question
         self.choices = choices
         self.answer = answer
         self.hint = hint
 
     def is_correct(self, user_answer: int) -> bool:
+        """입력한 답이 정답 번호와 일치하는지 확인한다."""
         return self.answer == user_answer
 
     def display(self, index: int):
+        """문제와 선택지를 번호(1부터)와 함께 화면에 출력한다."""
         print(f"\n[문제 {index}] {self.question}")
         for i, choice in enumerate(self.choices, 1):
             print(f"  {i}. {choice}")
 
     def to_dict(self) -> dict:
+        """퀴즈를 state.json에 저장할 수 있도록 딕셔너리로 변환한다."""
         return {
             "question": self.question,
             "choices": self.choices,
@@ -75,7 +80,9 @@ class Quiz:
         }
 
 class QuizGame:
+    """퀴즈 게임 전체(메뉴 진행, 플레이, 저장/불러오기 등)를 관리하는 클래스."""
     def __init__(self, filepath=STATE_FILE):
+        """게임 상태(퀴즈 목록/최고 점수/기록)를 초기화하고 state.json에서 저장된 데이터를 불러온다."""
         self.filepath = filepath
         self.quizzes = []
         self.best_score = 0.0
@@ -84,12 +91,14 @@ class QuizGame:
         self.load_state()
 
     def _load_defaults(self):
+        """DEFAULT_QUIZZES를 기준으로 퀴즈 목록과 최고 점수/기록을 초기 상태로 되돌린다."""
         self.quizzes = [Quiz(q["question"], q["choices"], q["answer"], q.get("hint", "")) for q in DEFAULT_QUIZZES]
         self.best_score = 0.0
         self.total_questions_at_best = 0
         self.history = []
 
     def load_state(self):
+        """state.json을 읽어 퀴즈/최고 점수/기록을 복원한다. 파일이 없거나 손상됐으면 기본 데이터로 복구한다."""
         if not os.path.exists(self.filepath):
             self._load_defaults()
             print("저장된 데이터가 없어 기본 퀴즈로 시작합니다.")
@@ -116,6 +125,7 @@ class QuizGame:
             self._load_defaults()
 
     def get_valid_input(self, prompt: str, min_value: int, max_value: int) -> int:
+        """min_value~max_value 범위의 정수를 입력받는다. 빈 입력, 숫자 변환 실패, 범위 밖이면 안내 메시지를 출력하고 재입력을 받는다."""
         while True:
             try:
                 raw_input = input(prompt).strip()
@@ -131,6 +141,7 @@ class QuizGame:
                 print("유효하지 않은 입력입니다. 정수를 입력해주세요.")
 
     def play(self):
+        """풀 문제 수를 선택받아 무작위 순서로 퀴즈를 출제하고, 채점·최고 점수 갱신·플레이 기록 저장까지 진행한다."""
         if not self.quizzes:
             print("퀴즈가 없습니다.")
             return
@@ -189,6 +200,7 @@ class QuizGame:
         self.save_state()
 
     def add_quiz(self):
+        """문제, 선택지 4개, 정답 번호, 힌트(선택)를 입력받아 새 퀴즈를 등록하고 즉시 저장한다."""
         print("\n새로운 퀴즈를 추가합니다.")
 
         while True:
@@ -215,6 +227,7 @@ class QuizGame:
         print("퀴즈가 추가되었습니다.")
 
     def save_state(self):
+        """현재 퀴즈 목록, 최고 점수, 플레이 기록을 state.json에 저장한다."""
         try:
             quiz_dicts = []
             for q in self.quizzes:
@@ -233,6 +246,7 @@ class QuizGame:
             print(f"데이터 저장 실패: {e}")
 
     def show_quiz_list(self):
+        """등록된 퀴즈 목록을 번호와 함께 출력한다."""
         if not self.quizzes:
             print("\n등록된 퀴즈가 없습니다.")
             return
@@ -245,6 +259,7 @@ class QuizGame:
         print("-" * 40)
 
     def delete_quiz(self):
+        """목록에서 번호를 선택받아 해당 퀴즈를 삭제하고 즉시 저장한다."""
         if not self.quizzes:
             print("\n등록된 퀴즈가 없습니다.")
             return
@@ -258,6 +273,7 @@ class QuizGame:
         print(f"'{removed.question}' 퀴즈를 삭제했습니다.")
 
     def show_best_score(self):
+        """저장된 최고 점수를 출력한다. 아직 기록이 없으면 안내 메시지를 출력한다."""
         print("\n" + "=" * 40)
         if self.best_score == 0 and self.total_questions_at_best == 0:
             print("아직 기록이 없습니다.")
@@ -266,6 +282,7 @@ class QuizGame:
         print("=" * 40)
 
     def show_history(self):
+        """지금까지 플레이한 모든 게임 기록(일시/문제 수/점수)을 순서대로 출력한다."""
         if not self.history:
             print("\n아직 플레이 기록이 없습니다.")
             return
@@ -279,6 +296,7 @@ class QuizGame:
         print("-" * 40)
 
     def run(self):
+        """메뉴를 반복 출력하며 사용자가 선택한 기능을 실행하고, 종료 시(또는 Ctrl+C/EOF 발생 시) 저장 후 안전하게 마친다."""
         while True:
             try:
                 print(MENU_TEXT)
