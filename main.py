@@ -45,7 +45,8 @@ MENU_TEXT = """
 2. 퀴즈 추가
 3. 퀴즈 목록
 4. 점수 확인
-5. 종료
+5. 퀴즈 삭제
+6. 종료
 ========================================"""
 
 class Quiz:
@@ -229,6 +230,19 @@ class QuizGame:
             print(f"[{i}] {quiz.question}")
         print("-" * 40)
 
+    def delete_quiz(self):
+        if not self.quizzes:
+            print("\n등록된 퀴즈가 없습니다.")
+            return
+
+        self.show_quiz_list()
+        index = self.get_valid_input(
+            f"삭제할 퀴즈 번호를 입력하세요 (1-{len(self.quizzes)}): ", 1, len(self.quizzes)
+        )
+        removed = self.quizzes.pop(index - 1)
+        self.save_state()
+        print(f"'{removed.question}' 퀴즈를 삭제했습니다.")
+
     def show_best_score(self):
         print("\n" + "=" * 40)
         if self.best_score == 0 and self.total_questions_at_best == 0:
@@ -241,7 +255,7 @@ class QuizGame:
         while True:
             try:
                 print(MENU_TEXT)
-                choice = self.get_valid_input("선택: ", 1, 5)
+                choice = self.get_valid_input("선택: ", 1, 6)
 
                 if choice == 1:
                     self.play()
@@ -252,6 +266,8 @@ class QuizGame:
                 elif choice == 4:
                     self.show_best_score()
                 elif choice == 5:
+                    self.delete_quiz()
+                elif choice == 6:
                     print("\n프로그램을 종료합니다.")
                     break
             except (KeyboardInterrupt, EOFError):
