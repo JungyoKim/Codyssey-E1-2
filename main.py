@@ -1,6 +1,7 @@
 import json
 import os
 import random
+from datetime import datetime
 
 STATE_FILE = "state.json"
 
@@ -46,7 +47,8 @@ MENU_TEXT = """
 3. 퀴즈 목록
 4. 점수 확인
 5. 퀴즈 삭제
-6. 종료
+6. 점수 기록 히스토리
+7. 종료
 ========================================"""
 
 class Quiz:
@@ -78,12 +80,14 @@ class QuizGame:
         self.quizzes = []
         self.best_score = 0
         self.total_questions_at_best = 0
+        self.history = []
         self.load_state()
 
     def _load_defaults(self):
         self.quizzes = [Quiz(q["question"], q["choices"], q["answer"], q.get("hint", "")) for q in DEFAULT_QUIZZES]
         self.best_score = 0
         self.total_questions_at_best = 0
+        self.history = []
 
     def load_state(self):
         if not os.path.exists(self.filepath):
@@ -105,6 +109,7 @@ class QuizGame:
             self.quizzes = loaded_quizzes
             self.best_score = data.get("best_score", 0)
             self.total_questions_at_best = int(data.get("total_questions_at_best", 0))
+            self.history = data.get("history", []) if isinstance(data.get("history", []), list) else []
             print(f"저장된 데이터를 불러왔습니다. (퀴즈 {len(self.quizzes)}개, 최고 점수 {self.best_score}점)")
         except (OSError, json.JSONDecodeError, KeyError, TypeError, ValueError) as e:
             print(f"데이터 파일이 손상되어 기본 퀴즈 데이터로 초기화합니다. ({e})")
@@ -168,12 +173,20 @@ class QuizGame:
         score_display = int(score) if score == int(score) else score
         print("\n" + "=" * 40)
         print(f"결과: {total}문제 중 {score_display}점 획득.")
+
+        self.history.append({
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "total": total,
+            "score": score
+        })
+
         if score > self.best_score:
             self.best_score = score
             self.total_questions_at_best = total
-            self.save_state()
             print("🎉 새로운 최고 점수입니다!")
         print("=" * 40)
+
+        self.save_state()
 
     def add_quiz(self):
         print("\n새로운 퀴즈를 추가합니다.")
@@ -210,7 +223,8 @@ class QuizGame:
             data = {
                 "quizzes": quiz_dicts,
                 "best_score": self.best_score,
-                "total_questions_at_best": self.total_questions_at_best
+                "total_questions_at_best": self.total_questions_at_best,
+                "history": self.history
             }
 
             with open("state.json", "w", encoding="utf-8") as f:
@@ -251,11 +265,24 @@ class QuizGame:
             print(f"최고 점수: {self.best_score}문제 정답 (총 {self.total_questions_at_best}문제 중)")
         print("=" * 40)
 
+    def show_history(self):
+        if not self.history:
+            print("\n아직 플레이 기록이 없습니다.")
+            return
+
+        print(f"\n게임 기록 히스토리 (총 {len(self.history)}회)")
+        print("-" * 40)
+        for i, record in enumerate(self.history, 1):
+            score = record.get("score", 0)
+            score_display = int(score) if score == int(score) else score
+            print(f"[{i}] {record.get('timestamp', '알 수 없음')} - {record.get('total', 0)}문제 중 {score_display}점")
+        print("-" * 40)
+
     def run(self):
         while True:
             try:
                 print(MENU_TEXT)
-                choice = self.get_valid_input("선택: ", 1, 6)
+                choice = self.get_valid_input("선택: ", 1, 7)
 
                 if choice == 1:
                     self.play()
@@ -268,6 +295,8 @@ class QuizGame:
                 elif choice == 5:
                     self.delete_quiz()
                 elif choice == 6:
+                    self.show_history()
+                elif choice == 7:
                     print("\n프로그램을 종료합니다.")
                     break
             except (KeyboardInterrupt, EOFError):
