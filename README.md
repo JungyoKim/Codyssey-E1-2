@@ -30,7 +30,9 @@ python main.py
 2. 퀴즈 추가
 3. 퀴즈 목록
 4. 점수 확인
-5. 종료
+5. 퀴즈 삭제
+6. 점수 기록 히스토리
+7. 종료
 ========================================
 선택:
 ```
@@ -39,11 +41,13 @@ python main.py
 
 | 메뉴 | 기능 | 설명 |
 |---|---|---|
-| 1 | 퀴즈 풀기 | 등록된 모든 퀴즈를 순서대로 출제하고, 정답/오답을 즉시 알려준 뒤 최종 결과를 표시합니다. 이번 점수가 기존 최고 점수보다 높으면 최고 점수를 갱신하고 `state.json`에 저장합니다. |
-| 2 | 퀴즈 추가 | 문제, 선택지 4개, 정답 번호(1~4)를 입력받아 새 퀴즈를 등록하고 즉시 `state.json`에 저장합니다. |
+| 1 | 퀴즈 풀기 | 풀 문제 수를 먼저 선택한 뒤, 그 수만큼 퀴즈를 무작위 순서(`random.shuffle`)로 출제합니다. 각 문제에서 `0`을 입력하면 힌트를 보고(정답 시 0.5점 차감) 다시 답을 입력할 수 있습니다. 정답/오답을 즉시 알려주고 최종 결과를 표시하며, 매 플레이 기록을 히스토리에 남기고 이번 점수가 기존 최고 점수보다 높으면 최고 점수를 갱신합니다. 모두 `state.json`에 저장됩니다. |
+| 2 | 퀴즈 추가 | 문제, 선택지 4개, 정답 번호(1~4), 힌트(선택 사항)를 입력받아 새 퀴즈를 등록하고 즉시 `state.json`에 저장합니다. |
 | 3 | 퀴즈 목록 | 등록된 퀴즈의 문제 목록을 번호와 함께 보여줍니다. |
 | 4 | 점수 확인 | 저장된 최고 점수(및 채점 기준이 된 총 문제 수)를 보여줍니다. 아직 기록이 없으면 안내 메시지를 출력합니다. |
-| 5 | 종료 | 프로그램을 저장 후 안전하게 종료합니다. |
+| 5 | 퀴즈 삭제 | 목록에서 번호를 선택해 퀴즈를 삭제하고 즉시 `state.json`에 반영합니다. |
+| 6 | 점수 기록 히스토리 | 지금까지 플레이한 모든 게임의 날짜/시간, 문제 수, 획득 점수를 순서대로 보여줍니다. |
+| 7 | 종료 | 프로그램을 저장 후 안전하게 종료합니다. |
 
 공통 처리:
 - 숫자 입력이 필요한 모든 곳에서 앞뒤 공백 제거, 빈 입력, 숫자 변환 실패, 허용 범위 밖 입력을 감지해 안내 메시지를 출력하고 재입력을 받습니다(`QuizGame.get_valid_input`).
@@ -54,17 +58,15 @@ python main.py
 
 ```
 Codyssey-E1-2/
-├── main.py         # Quiz, QuizGame 클래스와 실행 진입점(main)
-├── state.json       # 퀴즈 목록과 최고 점수를 저장하는 데이터 파일 (UTF-8)
-├── README.md         # 프로젝트 설명 문서
-├── .gitignore
-└── docs/
-    └── screenshots/  # 실행 화면 캡처 (menu.png, play.png, add_quiz.png, score.png)
+├── main.py       # Quiz, QuizGame 클래스와 실행 진입점(main)
+├── state.json    # 퀴즈 목록, 최고 점수, 게임 기록을 저장하는 데이터 파일 (UTF-8)
+├── README.md     # 프로젝트 설명 문서
+└── .gitignore
 ```
 
 `main.py` 내부 구조:
-- `Quiz`: 퀴즈 1개(문제, 선택지, 정답)를 표현. 정답 확인(`is_correct`), 출력(`display`), 직렬화(`to_dict`) 담당.
-- `QuizGame`: 게임 전체 진행을 담당. 퀴즈 목록/최고 점수 보관, 메뉴 루프(`run`), 퀴즈 풀기(`play`)/추가(`add_quiz`)/목록(`show_quiz_list`)/점수 확인(`show_best_score`), 파일 저장(`save_state`)/불러오기(`load_state`)를 메서드로 분리.
+- `Quiz`: 퀴즈 1개(문제, 선택지, 정답, 힌트)를 표현. 정답 확인(`is_correct`), 출력(`display`), 직렬화(`to_dict`) 담당.
+- `QuizGame`: 게임 전체 진행을 담당. 퀴즈 목록/최고 점수/게임 기록 보관, 메뉴 루프(`run`), 퀴즈 풀기(`play`)/추가(`add_quiz`)/목록(`show_quiz_list`)/삭제(`delete_quiz`)/점수 확인(`show_best_score`)/기록 조회(`show_history`), 파일 저장(`save_state`)/불러오기(`load_state`)를 메서드로 분리.
 
 ## 데이터 파일 설명 (`state.json`)
 
@@ -78,11 +80,15 @@ Codyssey-E1-2/
         {
             "question": "다음 중 Python에서 변수 이름(식별자)으로 사용할 수 없는 것은?",
             "choices": ["my_var", "user2", "for", "_score"],
-            "answer": 3
+            "answer": 3,
+            "hint": "파이썬 예약어(keyword)는 식별자로 사용할 수 없습니다."
         }
     ],
-    "best_score": 5,
-    "total_questions_at_best": 5
+    "best_score": 4.5,
+    "total_questions_at_best": 5,
+    "history": [
+        {"timestamp": "2026-08-06 10:04:11", "total": 5, "score": 4.5}
+    ]
 }
 ```
 
@@ -92,8 +98,13 @@ Codyssey-E1-2/
 | `quizzes[].question` | str | 문제 텍스트 |
 | `quizzes[].choices` | list[str] | 선택지 4개 |
 | `quizzes[].answer` | int | 정답 번호(1~4) |
-| `best_score` | int | 최고 점수(맞힌 문제 수) |
+| `quizzes[].hint` | str | 힌트 텍스트(없으면 빈 문자열) |
+| `best_score` | int/float | 최고 점수. 힌트를 사용한 정답은 0.5점이라 소수일 수 있음 |
 | `total_questions_at_best` | int | 최고 점수를 기록했을 당시의 전체 문제 수 |
+| `history` | list | 플레이할 때마다 추가되는 게임 기록 |
+| `history[].timestamp` | str | 플레이 일시(`YYYY-MM-DD HH:MM:SS`) |
+| `history[].total` | int | 그 게임에서 푼 문제 수 |
+| `history[].score` | int/float | 그 게임에서 획득한 점수 |
 
 파일이 없으면 기본 퀴즈 5개로 시작하고, 파일 내용이 손상되었으면(JSON 파싱 실패, `quizzes` 키 누락 등) 안내 메시지를 출력한 뒤 기본 퀴즈 데이터로 초기화합니다.
 
