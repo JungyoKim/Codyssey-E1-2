@@ -103,3 +103,7 @@ Codyssey-E1-2/
 - `docs/screenshots/play.png` — 퀴즈 풀기 화면
 - `docs/screenshots/add_quiz.png` — 퀴즈 추가 화면
 - `docs/screenshots/score.png` — 점수 확인 화면
+
+---
+
+> 이 줄은 clone/pull 실습(별도 디렉터리에서 clone → 수정 → commit → push)을 통해 추가되었습니다.
