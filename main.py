@@ -8,27 +8,32 @@ DEFAULT_QUIZZES = [
     {
         "question": "다음 중 Python에서 변수 이름(식별자)으로 사용할 수 없는 것은?",
         "choices": ["my_var", "user2", "for", "_score"],
-        "answer": 3
+        "answer": 3,
+        "hint": "파이썬 예약어(keyword)는 식별자로 사용할 수 없습니다."
     },
     {
         "question": "다음 중 Python에서 한 줄 주석을 작성할 때 사용하는 기호는?",
         "choices": ["//", "#", "/*", "--"],
-        "answer": 2
+        "answer": 2,
+        "hint": "파이썬 한 줄 주석은 특수 기호 하나로 시작합니다."
     },
     {
         "question": "다음 중 Python에서 리스트의 맨 뒤에 새 요소를 추가할 때 사용하는 메서드는?",
         "choices": ["add()", "append()", "push()", "insert()"],
-        "answer": 2
+        "answer": 2,
+        "hint": "'덧붙이다'라는 뜻의 영단어로 시작하는 메서드입니다."
     },
     {
         "question": "다음 중 Python 조건문에서 사용하는 키워드로 올바른 것은?",
         "choices": ["else if", "elseif", "elif", "then"],
-        "answer": 3
+        "answer": 3,
+        "hint": "else와 if를 합쳐 줄인 표현입니다."
     },
     {
         "question": "다음 중 Python에서 문자를 출력할 때 사용하는 기본 내장 함수는?",
         "choices": ["console.log()", "print()", "printf()", "System.out.println()"],
-        "answer": 2
+        "answer": 2,
+        "hint": "괄호 안의 값을 화면에 표시하는 함수입니다."
     }
 ]
 
@@ -44,10 +49,11 @@ MENU_TEXT = """
 ========================================"""
 
 class Quiz:
-    def __init__(self, question:str, choices:list[str], answer:int):
+    def __init__(self, question:str, choices:list[str], answer:int, hint:str = ""):
         self.question = question
         self.choices = choices
         self.answer = answer
+        self.hint = hint
 
     def is_correct(self, user_answer: int) -> bool:
         return self.answer == user_answer
@@ -61,7 +67,8 @@ class Quiz:
         return {
             "question": self.question,
             "choices": self.choices,
-            "answer": self.answer
+            "answer": self.answer,
+            "hint": self.hint
         }
 
 class QuizGame:
@@ -73,7 +80,7 @@ class QuizGame:
         self.load_state()
 
     def _load_defaults(self):
-        self.quizzes = [Quiz(q["question"], q["choices"], q["answer"]) for q in DEFAULT_QUIZZES]
+        self.quizzes = [Quiz(q["question"], q["choices"], q["answer"], q.get("hint", "")) for q in DEFAULT_QUIZZES]
         self.best_score = 0
         self.total_questions_at_best = 0
 
@@ -88,14 +95,14 @@ class QuizGame:
                 data = json.load(f)
 
             loaded_quizzes = [
-                Quiz(q["question"], q["choices"], q["answer"])
+                Quiz(q["question"], q["choices"], q["answer"], q.get("hint", ""))
                 for q in data["quizzes"]
             ]
             if not loaded_quizzes:
                 raise ValueError("저장된 퀴즈 목록이 비어 있습니다.")
 
             self.quizzes = loaded_quizzes
-            self.best_score = int(data.get("best_score", 0))
+            self.best_score = data.get("best_score", 0)
             self.total_questions_at_best = int(data.get("total_questions_at_best", 0))
             print(f"저장된 데이터를 불러왔습니다. (퀴즈 {len(self.quizzes)}개, 최고 점수 {self.best_score}점)")
         except (OSError, json.JSONDecodeError, KeyError, TypeError, ValueError) as e:
@@ -137,16 +144,29 @@ class QuizGame:
 
         for i, quiz in enumerate(quiz_order, 1):
             quiz.display(i)
-            user_answer = self.get_valid_input("정답 번호를 입력하세요: ", 1, len(quiz.choices))
+            user_answer = self.get_valid_input(
+                f"정답 번호를 입력하세요 (힌트 보기: 0, 1-{len(quiz.choices)}): ", 0, len(quiz.choices)
+            )
+
+            hint_used = False
+            if user_answer == 0:
+                hint_used = True
+                print(f"힌트: {quiz.hint}" if quiz.hint else "이 문제에는 힌트가 없습니다.")
+                user_answer = self.get_valid_input(
+                    f"정답 번호를 입력하세요 (1-{len(quiz.choices)}): ", 1, len(quiz.choices)
+                )
+
             if quiz.is_correct(user_answer):
-                print("정답입니다.")
-                score += 1
+                points = 0.5 if hint_used else 1
+                score += points
+                print(f"정답입니다! (힌트 사용, +{points}점)" if hint_used else "정답입니다!")
             else:
                 print(f"오답입니다. 정답은 {quiz.answer}번 입니다.")
 
         total = len(quiz_order)
+        score_display = int(score) if score == int(score) else score
         print("\n" + "=" * 40)
-        print(f"결과: {total}문제 중 {score}문제 정답.")
+        print(f"결과: {total}문제 중 {score_display}점 획득.")
         if score > self.best_score:
             self.best_score = score
             self.total_questions_at_best = total
@@ -173,8 +193,9 @@ class QuizGame:
                 print("선택지는 빈 값일 수 없습니다. 다시 입력해주세요.")
 
         answer = self.get_valid_input("정답 번호를 입력하세요. (1-4): ", 1, 4)
-    
-        self.quizzes.append(Quiz(question, choices, answer))
+        hint = input("힌트 (선택 사항, 없으면 Enter): ").strip()
+
+        self.quizzes.append(Quiz(question, choices, answer, hint))
 
         self.save_state()
         print("퀴즈가 추가되었습니다.")
