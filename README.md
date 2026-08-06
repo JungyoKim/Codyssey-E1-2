@@ -117,8 +117,9 @@ Codyssey-E1-2/
 
 ## 실행 화면 스크린샷
 
-### 개발 환경
-![개발 환경](src/env.png)
+### 개발 환경 및 커밋 로그
+Python/Git 버전, VSCode 개발 환경과 `git log --oneline --graph` 실행 결과를 함께 캡처했습니다.
+![개발 환경 및 커밋 로그](src/env.png)
 
 ### 메뉴 화면
 ![메뉴 화면](src/menu.png)
