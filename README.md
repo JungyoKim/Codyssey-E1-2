@@ -61,7 +61,12 @@ Codyssey-E1-2/
 ├── main.py       # Quiz, QuizGame 클래스와 실행 진입점(main)
 ├── state.json    # 퀴즈 목록, 최고 점수, 게임 기록을 저장하는 데이터 파일 (UTF-8)
 ├── README.md     # 프로젝트 설명 문서
-└── .gitignore
+├── .gitignore
+└── src/          # 실행 화면 스크린샷
+    ├── menu.png
+    ├── play.png
+    ├── add_quiz.png
+    └── score.png
 ```
 
 `main.py` 내부 구조:
@@ -110,10 +115,17 @@ Codyssey-E1-2/
 
 ## 실행 화면 스크린샷
 
-- `docs/screenshots/menu.png` — 메뉴 화면
-- `docs/screenshots/play.png` — 퀴즈 풀기 화면
-- `docs/screenshots/add_quiz.png` — 퀴즈 추가 화면
-- `docs/screenshots/score.png` — 점수 확인 화면
+### 메뉴 화면
+![메뉴 화면](src/menu.png)
+
+### 퀴즈 풀기
+![퀴즈 풀기](src/play.png)
+
+### 퀴즈 추가
+![퀴즈 추가](src/add_quiz.png)
+
+### 점수 확인
+![점수 확인](src/score.png)
 
 ---
 

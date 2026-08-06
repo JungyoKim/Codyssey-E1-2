@@ -54,9 +54,26 @@
             ],
             "answer": 2,
             "hint": "괄호 안의 값을 화면에 표시하는 함수입니다."
+        },
+        {
+            "question": "다음 중 Python에서 type(3 / 2)의 결과는?",
+            "choices": [
+                "int",
+                "float",
+                "srt",
+                "bool"
+            ],
+            "answer": 2,
+            "hint": "/ 실수나눗셈, // 정수나눗셈"
         }
     ],
-    "best_score": 0,
-    "total_questions_at_best": 0,
-    "history": []
+    "best_score": 1,
+    "total_questions_at_best": 1,
+    "history": [
+        {
+            "timestamp": "2026-08-06 10:18:50",
+            "total": 1,
+            "score": 1
+        }
+    ]
 }
