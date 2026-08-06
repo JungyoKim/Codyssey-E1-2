@@ -62,8 +62,10 @@ Codyssey-E1-2/
 ├── state.json    # 퀴즈 목록, 최고 점수, 게임 기록을 저장하는 데이터 파일 (UTF-8)
 ├── README.md     # 프로젝트 설명 문서
 ├── .gitignore
-└── src/          # 실행 화면 스크린샷
+└── src/          # 개발 환경·실행 화면 스크린샷
+    ├── env.png
     ├── menu.png
+    ├── list.png
     ├── play.png
     ├── add_quiz.png
     └── score.png
@@ -115,8 +117,14 @@ Codyssey-E1-2/
 
 ## 실행 화면 스크린샷
 
+### 개발 환경
+![개발 환경](src/env.png)
+
 ### 메뉴 화면
 ![메뉴 화면](src/menu.png)
+
+### 퀴즈 목록
+![퀴즈 목록](src/list.png)
 
 ### 퀴즈 풀기
 ![퀴즈 풀기](src/play.png)
