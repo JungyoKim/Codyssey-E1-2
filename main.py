@@ -122,13 +122,18 @@ class QuizGame:
             print("퀴즈가 없습니다.")
             return
 
-        print(f"\n퀴즈를 시작합니다. (총 {len(self.quizzes)}문제)")
+        num_questions = self.get_valid_input(
+            f"몇 문제를 풀지 선택하세요 (1-{len(self.quizzes)}): ", 1, len(self.quizzes)
+        )
+
+        print(f"\n퀴즈를 시작합니다. (총 {num_questions}문제)")
         print("-" * 40)
 
         score = 0
 
         quiz_order = self.quizzes[:]
         random.shuffle(quiz_order)
+        quiz_order = quiz_order[:num_questions]
 
         for i, quiz in enumerate(quiz_order, 1):
             quiz.display(i)
