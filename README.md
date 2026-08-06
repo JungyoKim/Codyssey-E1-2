@@ -151,3 +151,4 @@ Python/Git 버전, VSCode 개발 환경과 `git log --oneline --graph` 실행 �
 
 ---
 
+> 이 줄은 clone/pull 실습(별도 디렉터리에서 clone → 수정 → commit → push)을 통해 추가했다.
