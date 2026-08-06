@@ -83,26 +83,10 @@ Codyssey-E1-2/
     "quizzes": [
         {
             "question": "다음 중 Python에서 변수 이름(식별자)으로 사용할 수 없는 것은?",
-            "choices": [
-                "my_var",
-                "user2",
-                "for",
-                "_score"
-            ],
+            "choices": ["my_var", "user2", "for", "_score"],
             "answer": 3,
             "hint": "파이썬 예약어(keyword)는 식별자로 사용할 수 없습니다."
-        },
-        {
-            "question": "다음 중 Python에서 한 줄 주석을 작성할 때 사용하는 기호는?",
-            "choices": [
-                "//",
-                "#",
-                "/*",
-                "--"
-            ],
-            "answer": 2,
-            "hint": "파이썬 한 줄 주석은 특수 기호 하나로 시작합니다."
-        },
+        }
     ],
     "best_score": 4.5,
     "total_questions_at_best": 5,
@@ -119,12 +103,12 @@ Codyssey-E1-2/
 | `quizzes[].choices` | list[str] | 선택지 4개 |
 | `quizzes[].answer` | int | 정답 번호(1~4) |
 | `quizzes[].hint` | str | 힌트 텍스트(없으면 빈 문자열) |
-| `best_score` | int/float | 최고 점수. 힌트를 사용한 정답은 0.5점이라 소수일 수 있음 |
+| `best_score` | float | 최고 점수. 힌트를 사용하면 0.5점 단위라 항상 float으로 저장됨 |
 | `total_questions_at_best` | int | 최고 점수를 기록했을 당시의 전체 문제 수 |
 | `history` | list | 플레이할 때마다 추가되는 게임 기록 |
 | `history[].timestamp` | str | 플레이 일시(`YYYY-MM-DD HH:MM:SS`) |
 | `history[].total` | int | 그 게임에서 푼 문제 수 |
-| `history[].score` | int/float | 그 게임에서 획득한 점수 |
+| `history[].score` | float | 그 게임에서 획득한 점수 (항상 float) |
 
 파일이 없으면 기본 퀴즈 5개로 시작하고, 파일 내용이 손상되었으면(JSON 파싱 실패, `quizzes` 키 누락 등) 안내 메시지를 출력한 뒤 기본 퀴즈 데이터로 초기화한다.
 
