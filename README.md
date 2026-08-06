@@ -1,252 +1,105 @@
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git add .
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git commit -m ""
-                                         omp -r^C        
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> ^C
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git commit -m "초기화"       
-[main (root-commit) 8954771] 초기화
- 2 files changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 .gitignore
- create mode 100644 README.md
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git branch -M main
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git remote add origin git@git@github.com:JungyoKim/Codyssey-E1-2.git
-error: remote origin already exists.
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git push -u origin main
-Enumerating objects: 3, done.
-Counting objects: 100% (3/3), done.
-Delta compression using up to 8 threads
-Compressing objects: 100% (2/2), done.
-Writing objects: 100% (3/3), 236 bytes | 236.00 KiB/s, done.
-Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
-To https://github.com/JungyoKim/Codyssey-E1-2
- * [new branch]      main -> main
-branch 'main' set up to track 'origin/main'.
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> 
+# 나만의 퀴즈 게임 (Codyssey-E1-2)
 
+터미널에서 동작하는 Python 콘솔 퀴즈 게임입니다. 메뉴에서 번호를 선택해 퀴즈를 풀고, 새 퀴즈를 등록하고, 등록된 퀴즈 목록과 최고 점수를 확인할 수 있습니다. 추가한 퀴즈와 최고 점수는 `state.json`에 저장되어 프로그램을 종료했다가 다시 실행해도 그대로 유지됩니다.
 
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git add .
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git commit -m "Quiz 클래스 추가"
-[main 17b8e85] Quiz 클래스 추가
- 2 files changed, 23 insertions(+)
- create mode 100644 main.py
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git push
-Enumerating objects: 5, done.
-Counting objects: 100% (5/5), done.
-Delta compression using up to 8 threads
-Compressing objects: 100% (3/3), done.
-Writing objects: 100% (3/3), 796 bytes | 796.00 KiB/s, done.
-Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
-To https://github.com/JungyoKim/Codyssey-E1-2
-   8954771..17b8e85  main -> main
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> 
+## 프로젝트 개요
 
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git add .      
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git commit -m "기본 퀴즈 데이터 추가"
-[main 195076f] 기본 퀴즈 데이터 추가
- 3 files changed, 68 insertions(+)
- create mode 100644 state.json
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git push
-Enumerating objects: 7, done.
-Counting objects: 100% (7/7), done.
-Delta compression using up to 8 threads
-Compressing objects: 100% (4/4), done.
-Writing objects: 100% (4/4), 1.28 KiB | 1.28 MiB/s, done.
-Total 4 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
-remote: Resolving deltas: 100% (1/1), completed with 1 local object.
-To https://github.com/JungyoKim/Codyssey-E1-2
-   17b8e85..195076f  main -> main
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> 
+- Python 기본 문법(변수, 조건문, 반복문, 함수)과 클래스(객체 지향), JSON 파일 입출력, Git 워크플로우를 한 번에 익히기 위한 학습용 프로젝트입니다.
+- `Quiz`(퀴즈 1개를 표현) / `QuizGame`(게임 전체 진행·저장을 관리) 두 클래스로 역할을 분리했습니다.
+- 잘못된 입력(빈 값, 숫자 아님, 범위 밖), `Ctrl+C`/입력 스트림 종료(EOF), 저장 파일 손상까지 예외 처리를 통해 비정상 종료 없이 동작하도록 만들었습니다.
 
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> python main.py
+## 퀴즈 주제와 선정 이유
 
-퀴즈를 시작합니다. (총 5문제)
-----------------------------------------
+주제는 **Python 기초 문법**입니다. 이 과제 자체가 Python 문법을 배우는 과정이기 때문에, 배운 내용(식별자 규칙, 주석, 리스트 메서드, 조건문 키워드, 출력 함수 등)을 스스로 퀴즈로 만들어 복습하면 학습 효과가 크다고 판단해 선택했습니다.
 
-[문제 1] 다음 중 Python에서 변수 이름(식별자)으로 사용할 수 없는 것은?
-  1. my_var
-  2. user2
-  3. for
-  4. _score
-정답 번호를 입력하세요: 3
-정답입니다.
+## 실행 방법
 
-[문제 2] 다음 중 Python에서 한 줄 주석을 작성할 때 사용하는 기호는?
-  1. //
-  2. #
-  3. /*
-  4. --
-정답 번호를 입력하세요: 2
-정답입니다.
+```bash
+python main.py
+```
 
-[문제 3] 다음 중 Python에서 리스트의 맨 뒤에 새 요소를 추가할 때 사용하는 메서드는?
-  1. add()
-  2. append()
-  3. push()
-  4. insert()
-정답 번호를 입력하세요: 2
-정답입니다.
+- Python 3.10 이상이 필요합니다(표준 라이브러리만 사용, 외부 패키지 설치 불필요).
+- 실행하면 프로젝트 루트의 `state.json`을 읽어 이전에 저장된 퀴즈/최고 점수를 불러옵니다. 파일이 없으면 기본 퀴즈 5개로 시작합니다.
+- 메뉴에서 숫자를 입력해 기능을 선택합니다.
 
-[문제 4] 다음 중 Python 조건문에서 사용하는 키워드로 올바른 것은?
-  1. else if
-  2. elseif
-  3. elif
-  4. then
-정답 번호를 입력하세요: 3
-정답입니다.
+```
+========================================
+        🎯 나만의 퀴즈 게임 🎯
+========================================
+1. 퀴즈 풀기
+2. 퀴즈 추가
+3. 퀴즈 목록
+4. 점수 확인
+5. 종료
+========================================
+선택:
+```
 
-[문제 5] 다음 중 Python에서 문자를 출력할 때 사용하는 기본 내장 함수는?
-  1. console.log()
-  2. print()
-  3. printf()
-  4. System.out.println()
-정답 번호를 입력하세요: 2
-정답입니다.
-결과: 5문제 중 5문제 정답.
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> 
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> 
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> 
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> 
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> 
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> python main.py
+## 기능 목록
 
-퀴즈를 시작합니다. (총 5문제)
-----------------------------------------
+| 메뉴 | 기능 | 설명 |
+|---|---|---|
+| 1 | 퀴즈 풀기 | 등록된 모든 퀴즈를 순서대로 출제하고, 정답/오답을 즉시 알려준 뒤 최종 결과를 표시합니다. 이번 점수가 기존 최고 점수보다 높으면 최고 점수를 갱신하고 `state.json`에 저장합니다. |
+| 2 | 퀴즈 추가 | 문제, 선택지 4개, 정답 번호(1~4)를 입력받아 새 퀴즈를 등록하고 즉시 `state.json`에 저장합니다. |
+| 3 | 퀴즈 목록 | 등록된 퀴즈의 문제 목록을 번호와 함께 보여줍니다. |
+| 4 | 점수 확인 | 저장된 최고 점수(및 채점 기준이 된 총 문제 수)를 보여줍니다. 아직 기록이 없으면 안내 메시지를 출력합니다. |
+| 5 | 종료 | 프로그램을 저장 후 안전하게 종료합니다. |
 
-[문제 1] 다음 중 Python에서 변수 이름(식별자)으로 사용할 수 없는 것은?
-  1. my_var
-  2. user2
-  3. for
-  4. _score
-정답 번호를 입력하세요:  
-빈 입력입니다. 다시 입력해주세요.
-정답 번호를 입력하세요:  
-빈 입력입니다. 다시 입력해주세요.
-정답 번호를 입력하세요:  
-빈 입력입니다. 다시 입력해주세요.
-정답 번호를 입력하세요:  
-빈 입력입니다. 다시 입력해주세요.
-정답 번호를 입력하세요:  
-빈 입력입니다. 다시 입력해주세요.
-정답 번호를 입력하세요: ㅇㄹㄴㅇㄹ
-유효하지 않은 입력입니다. 정수를 입력해주세요.
-정답 번호를 입력하세요: 1q2
-유효하지 않은 입력입니다. 정수를 입력해주세요.
-정답 번호를 입력하세요: 12
-입력 값은 1에서 4 사이의 정수여야 합니다.
-정답 번호를 입력하세요: 12
-입력 값은 1에서 4 사이의 정수여야 합니다.
-정답 번호를 입력하세요: "1"
-유효하지 않은 입력입니다. 정수를 입력해주세요.
-정답 번호를 입력하세요: "1"1
-유효하지 않은 입력입니다. 정수를 입력해주세요.
-정답 번호를 입력하세요: 1
-오답입니다. 정답은 '3'입니다.
+공통 처리:
+- 숫자 입력이 필요한 모든 곳에서 앞뒤 공백 제거, 빈 입력, 숫자 변환 실패, 허용 범위 밖 입력을 감지해 안내 메시지를 출력하고 재입력을 받습니다(`QuizGame.get_valid_input`).
+- 실행 중 `Ctrl+C`(KeyboardInterrupt)나 입력 스트림 종료(EOFError)가 발생해도 예외를 그대로 노출하지 않고, 안내 메시지를 출력한 뒤 지금까지의 데이터를 저장하고 안전하게 종료합니다.
+- `state.json`이 없거나(첫 실행) 손상된 경우(JSON 파싱 실패, 필수 키 누락 등) 기본 퀴즈 데이터로 자동 복구합니다.
 
-[문제 2] 다음 중 Python에서 한 줄 주석을 작성할 때 사용하는 기호는?
-  1. //
-  2. #
-  3. /*
-  4. --
-정답 번호를 입력하세요: ^ZTraceback (most recent call last):
-  File "C:\Users\kimjungyo\Dev\Codyssey-E1-2\main.py", line 102, in <module>
-    manager.play()
-  File "C:\Users\kimjungyo\Dev\Codyssey-E1-2\main.py", line 90, in play
-    user_answer = self.get_valid_input("정답 번호를 입력하세요: ", 1, len(quiz.choices))
-  File "C:\Users\kimjungyo\Dev\Codyssey-E1-2\main.py", line 66, in get_valid_input
-    raw_input = input(prompt).strip()
-KeyboardInterrupt
-^CTerminate batch job (Y/N)? 
-^C
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> python main.py
-퀴즈가 없습니다.
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> python main.py
-퀴즈가 없습니다.
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> python main.py
+## 파일 구조
 
-퀴즈를 시작합니다. (총 5문제)
-----------------------------------------
+```
+Codyssey-E1-2/
+├── main.py         # Quiz, QuizGame 클래스와 실행 진입점(main)
+├── state.json       # 퀴즈 목록과 최고 점수를 저장하는 데이터 파일 (UTF-8)
+├── README.md         # 프로젝트 설명 문서
+├── .gitignore
+└── docs/
+    └── screenshots/  # 실행 화면 캡처 (menu.png, play.png, add_quiz.png, score.png)
+```
 
-[문제 1] 다음 중 Python에서 변수 이름(식별자)으로 사용할 수 없는 것은?
-  1. my_var
-  2. user2
-  3. for
-  4. _score
-정답 번호를 입력하세요: Traceback (most recent call last):
-  File "C:\Users\kimjungyo\Dev\Codyssey-E1-2\main.py", line 102, in <module>
-    manager.play()
-  File "C:\Users\kimjungyo\Dev\Codyssey-E1-2\main.py", line 90, in play
-    user_answer = self.get_valid_input("정답 번호를 입력하세요: ", 1, len(quiz.choices))
-  File "C:\Users\kimjungyo\Dev\Codyssey-E1-2\main.py", line 66, in get_valid_input
-    raw_input = input(prompt).strip()
-KeyboardInterrupt
-^CTerminate batch job (Y/N)? 
-^C
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> ^C
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> ^C
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> ^C
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> ^C
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> 
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> 
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git add . 
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git commit -m "퀴즈 풀기 기능 및 예외 처리 구현" 
-[quizmanager ff03b2c] 퀴즈 풀기 기능 및 예외 처리 구현
- 2 files changed, 68 insertions(+)
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> 
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> 
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> 
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> 
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git checkout main
-Switched to branch 'main'
-Your branch is up to date with 'origin/main'.
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git branch
-* main
-  quizmanager
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git push origin branch
-error: src refspec branch does not match any
-error: failed to push some refs to 'https://github.com/JungyoKim/Codyssey-E1-2'
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git push origin quizmanager
-Enumerating objects: 7, done.
-Counting objects: 100% (7/7), done.
-Delta compression using up to 8 threads
-Compressing objects: 100% (4/4), done.
-Writing objects: 100% (4/4), 1.96 KiB | 1.96 MiB/s, done.
-Total 4 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
-remote: Resolving deltas: 100% (1/1), completed with 1 local object.
-remote: 
-remote: Create a pull request for 'quizmanager' on GitHub by visiting:
-remote:      https://github.com/JungyoKim/Codyssey-E1-2/pull/new/quizmanager
-remote: 
-To https://github.com/JungyoKim/Codyssey-E1-2
- * [new branch]      quizmanager -> quizmanager
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git merge quizmanager      
-Updating 195076f..ff03b2c
-Fast-forward
- README.md | 17 +++++++++++++++++
- main.py   | 51 +++++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 68 insertions(+)
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> 
+`main.py` 내부 구조:
+- `Quiz`: 퀴즈 1개(문제, 선택지, 정답)를 표현. 정답 확인(`is_correct`), 출력(`display`), 직렬화(`to_dict`) 담당.
+- `QuizGame`: 게임 전체 진행을 담당. 퀴즈 목록/최고 점수 보관, 메뉴 루프(`run`), 퀴즈 풀기(`play`)/추가(`add_quiz`)/목록(`show_quiz_list`)/점수 확인(`show_best_score`), 파일 저장(`save_state`)/불러오기(`load_state`)를 메서드로 분리.
 
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> python main.py
+## 데이터 파일 설명 (`state.json`)
 
-새로운 퀴즈를 추가합니다.
-문제: asdf
-선택지 1: sadf
-선택지 2: sadf
-선택지 3: asdf
-선택지 4: sadf
-정답 번호를 입력하세요. (1-4): 3
-퀴즈가 추가되었습니다.
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> 
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git add main.py
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git commit -m "퀴즈 추가 기능 및 JSON파일 저장 구현"
-[main 94b33a0] 퀴즈 추가 기능 및 JSON파일 저장 구현
- 1 file changed, 44 insertions(+), 1 deletion(-)
-PS C:\Users\kimjungyo\Dev\Codyssey-E1-2> git push
-Enumerating objects: 5, done.
-Counting objects: 100% (5/5), done.
-Delta compression using up to 8 threads
-Compressing objects: 100% (3/3), done.
-Writing objects: 100% (3/3), 943 bytes | 943.00 KiB/s, done.
-Total 3 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
-remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
-To https://github.com/JungyoKim/Codyssey-E1-2
-   399cc45..94b33a0  main -> main
+- 위치: 프로젝트 루트(`main.py`와 같은 경로), 인코딩: UTF-8.
+- 프로그램 시작 시 `QuizGame.load_state()`가 읽고, 퀴즈 추가 직후·최고 점수 갱신 직후·프로그램 종료 시 `QuizGame.save_state()`가 씁니다.
+- 스키마:
+
+```json
+{
+    "quizzes": [
+        {
+            "question": "다음 중 Python에서 변수 이름(식별자)으로 사용할 수 없는 것은?",
+            "choices": ["my_var", "user2", "for", "_score"],
+            "answer": 3
+        }
+    ],
+    "best_score": 5,
+    "total_questions_at_best": 5
+}
+```
+
+| 필드 | 타입 | 설명 |
+|---|---|---|
+| `quizzes` | list | 등록된 퀴즈 목록 |
+| `quizzes[].question` | str | 문제 텍스트 |
+| `quizzes[].choices` | list[str] | 선택지 4개 |
+| `quizzes[].answer` | int | 정답 번호(1~4) |
+| `best_score` | int | 최고 점수(맞힌 문제 수) |
+| `total_questions_at_best` | int | 최고 점수를 기록했을 당시의 전체 문제 수 |
+
+파일이 없으면 기본 퀴즈 5개로 시작하고, 파일 내용이 손상되었으면(JSON 파싱 실패, `quizzes` 키 누락 등) 안내 메시지를 출력한 뒤 기본 퀴즈 데이터로 초기화합니다.
+
+## 실행 화면 스크린샷
+
+- `docs/screenshots/menu.png` — 메뉴 화면
+- `docs/screenshots/play.png` — 퀴즈 풀기 화면
+- `docs/screenshots/add_quiz.png` — 퀴즈 추가 화면
+- `docs/screenshots/score.png` — 점수 확인 화면
