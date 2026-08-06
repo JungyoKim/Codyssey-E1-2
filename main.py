@@ -78,14 +78,14 @@ class QuizGame:
     def __init__(self, filepath=STATE_FILE):
         self.filepath = filepath
         self.quizzes = []
-        self.best_score = 0
+        self.best_score = 0.0
         self.total_questions_at_best = 0
         self.history = []
         self.load_state()
 
     def _load_defaults(self):
         self.quizzes = [Quiz(q["question"], q["choices"], q["answer"], q.get("hint", "")) for q in DEFAULT_QUIZZES]
-        self.best_score = 0
+        self.best_score = 0.0
         self.total_questions_at_best = 0
         self.history = []
 
@@ -142,7 +142,7 @@ class QuizGame:
         print(f"\n퀴즈를 시작합니다. (총 {num_questions}문제)")
         print("-" * 40)
 
-        score = 0
+        score = 0.0
 
         quiz_order = self.quizzes[:]
         random.shuffle(quiz_order)
@@ -227,7 +227,7 @@ class QuizGame:
                 "history": self.history
             }
 
-            with open("state.json", "w", encoding="utf-8") as f:
+            with open(self.filepath, "w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=4)
         except Exception as e:
             print(f"데이터 저장 실패: {e}")
