@@ -3,8 +3,9 @@
 ## 프로젝트 개요
 
 - Python 기본 문법(변수, 조건문, 반복문, 함수)과 클래스(객체 지향), JSON 파일 입출력, Git 워크플로우를 동시에 익히기 위한 학습용 프로젝트이다.
-- `Quiz`(퀴즈 1개를 표현) / `QuizGame`(게임 전체 진행·저장을 관리) 두 클래스로 역할을 분리했다.
-- 잘못된 입력(빈 값, 숫자 아님, 범위 밖), `Ctrl+C`/입력 스트림 종료(EOF), 저장 파일 손상까지 예외 처리를 통해 비정상 종료 없이 동작히도록 구현했다.
+- `Quiz`(퀴즈 1개를 표현) / `QuizGame`(게임 전체 진행·저장을 관리) 두 클래스로 역할을 분리하고 `src/` 패키지에 모듈화했다.
+- 메인 실행 루프는 `main.py`에서 담당하고 `src/`에는 퀴즈 모듈 및 로직만 배치했다.
+- 잘못된 입력(빈 값, 숫자 아님, 범위 밖), `Ctrl+C`/입력 스트림 종료(EOF), 저장 파일 손상까지 예외 처리를 통해 비정상 종료 없이 동작하도록 구현했다.
 
 ## 퀴즈 주제와 선정 이유
 
@@ -47,7 +48,7 @@ python main.py
 7. **종료** — 프로그램을 저장 후 안전하게 종료한다.
 
 공통 처리:
-- 숫자 입력이 필요한 모든 곳에서 앞뒤 공백 제거, 빈 입력, 숫자 변환 실패, 허용 범위 밖 입력을 감지해 안내 메시지를 출력하고 재입력을 받습니다(`QuizGame.get_valid_input`).
+- 숫자 입력이 필요한 모든 곳에서 앞뒤 공백 제거, 빈 입력, 숫자 변환 실패, 허용 범위 밖 입력을 감지해 안내 메시지를 출력하고 재입력을 받습니다(`get_valid_input`).
 - 실행 중 `Ctrl+C`(KeyboardInterrupt)나 입력 스트림 종료(EOFError)가 발생해도 예외를 그대로 노출하지 않고, 안내 메시지를 출력한 뒤 지금까지의 데이터를 저장하고 안전하게 종료한다.
 - `state.json`이 없거나(첫 실행) 손상된 경우(JSON 파싱 실패, 필수 키 누락 등) 기본 퀴즈 데이터로 자동 복구한다.
 
@@ -55,22 +56,30 @@ python main.py
 
 ```
 Codyssey-E1-2/
-├── main.py       # Quiz, QuizGame 클래스와 실행 진입점(main)
-├── state.json    # 퀴즈 목록, 최고 점수, 게임 기록을 저장하는 데이터 파일 (UTF-8)
-├── README.md     # 프로젝트 설명 문서
+├── main.py          # 메인 메뉴 루프 및 프로그램 실행 진입점
+├── state.json       # 퀴즈 목록, 최고 점수, 게임 기록을 저장하는 데이터 파일 (UTF-8)
+├── README.md        # 프로젝트 설명 문서
 ├── .gitignore
-└── src/          # 개발 환경·실행 화면 스크린샷
-    ├── env.png
-    ├── menu.png
-    ├── list.png
-    ├── play.png
-    ├── add_quiz.png
-    └── score.png
+├── evidence/        # 증빙자료 및 실행 화면 스크린샷
+│   ├── env.png
+│   ├── menu.png
+│   ├── list.png
+│   ├── play.png
+│   ├── add_quiz.png
+│   ├── score.png
+│   └── git.png
+└── src/             # 소스 코드 모듈
+    ├── __init__.py  # 패키지 초기화 및 주요 클래스 export
+    ├── constants.py # 기본 데이터(DEFAULT_QUIZZES), 데이터 파일 경로(STATE_FILE), 메뉴 텍스트(MENU_TEXT) 등 상수 정의
+    ├── quiz.py      # 개별 퀴즈(Quiz 클래스) 모듈
+    └── game.py      # 게임 진행, 입력 검증, 데이터 관리(QuizGame 클래스 및 get_valid_input) 모듈
 ```
 
-`main.py` 내부 구조:
-- `Quiz`: 퀴즈 1개(문제, 선택지, 정답, 힌트)를 표현. 정답 확인(`is_correct`), 출력(`display`), 직렬화(`to_dict`) 담당.
-- `QuizGame`: 게임 전체 진행을 담당. 퀴즈 목록/최고 점수/게임 기록 보관, 메뉴 루프(`run`), 퀴즈 풀기(`play`)/추가(`add_quiz`)/목록(`show_quiz_list`)/삭제(`delete_quiz`)/점수 확인(`show_best_score`)/기록 조회(`show_history`), 파일 저장(`save_state`)/불러오기(`load_state`)를 메서드로 분리.
+모듈 구조 및 역할:
+- `main.py`: 메인 메뉴 루프(`main()`)를 실행하고 사용자 선택에 따라 `QuizGame` 메서드를 호출하는 Entry Point.
+- `src/constants.py`: `STATE_FILE`, `DEFAULT_QUIZZES`, `MENU_TEXT` 등 상수 관리.
+- `src/quiz.py`: `Quiz` 클래스 (퀴즈 1개 표현, 정답 확인 `is_correct`, 화면 출력 `display`, 직렬화 `to_dict` 담당).
+- `src/game.py`: `QuizGame` 클래스 (퀴즈 목록/최고 점수/게임 기록 관리, 퀴즈 풀기 `play`, 퀴즈 추가 `add_quiz`, 삭제 `delete_quiz`, 점수 확인 `show_best_score`, 히스토리 `show_history`, 파일 저장/불러오기 `save_state`/`load_state` 담당) 및 입력 검증 함수 `get_valid_input`.
 
 ## 데이터 파일 설명 (`state.json`)
 
@@ -116,22 +125,22 @@ Codyssey-E1-2/
 
 ### 개발 환경 및 커밋 로그
 Python/Git 버전, VSCode 개발 환경과 `git log --oneline --graph` 실행 결과를 함께 캡처했다.
-![개발 환경 및 커밋 로그](src/env.png)
+![개발 환경 및 커밋 로그](evidence/env.png)
 
 ### 메뉴 화면
-![메뉴 화면](src/menu.png)
+![메뉴 화면](evidence/menu.png)
 
 ### 퀴즈 목록
-![퀴즈 목록](src/list.png)
+![퀴즈 목록](evidence/list.png)
 
 ### 퀴즈 풀기
-![퀴즈 풀기](src/play.png)
+![퀴즈 풀기](evidence/play.png)
 
 ### 퀴즈 추가
-![퀴즈 추가](src/add_quiz.png)
+![퀴즈 추가](evidence/add_quiz.png)
 
 ### 점수 확인
-![점수 확인](src/score.png)
+![점수 확인](evidence/score.png)
 
 ---
 
@@ -139,4 +148,4 @@ Python/Git 버전, VSCode 개발 환경과 `git log --oneline --graph` 실행 �
 
 > 이 줄은 clone/pull 실습(별도 디렉터리에서 clone → 수정 → commit → push)을 통해 추가했다.
 
-![Git 저장소 복제 실습 확인](src/git.png)
+![Git 저장소 복제 실습 확인](evidence/git.png)
